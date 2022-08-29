@@ -8,10 +8,7 @@ const { expect } = chai;
 
 describe('Testa a camada userService', () => {
   describe('quando o usuário não existe no BD', () => {
-    const mock = {
-      message: 'User not found',
-      statusCode: 404,
-    }
+    const mock = null
 
     const payloadUser = {
       email: 'teste@teste.com',
@@ -19,7 +16,7 @@ describe('Testa a camada userService', () => {
     }
     
     beforeEach(() => {
-      sinon.stub(new UserService(), 'login').resolves(mock)
+      sinon.stub(User, 'findOne').resolves(mock)
     })
 
     afterEach(() => {
