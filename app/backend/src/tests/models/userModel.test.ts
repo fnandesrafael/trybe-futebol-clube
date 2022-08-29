@@ -22,6 +22,7 @@ describe('Testa a model User', () => {
       expect(sut).to.be.equal(null)
     });
   });
+
   describe('quando existem usuários cadastrados no BD', () => { 
     const mock = {
       id: 1,
