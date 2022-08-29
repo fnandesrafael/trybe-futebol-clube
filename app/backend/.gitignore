@@ -3,3 +3,5 @@ node_modules.tar.gz
 /node_modules
 .env
 *.http
+src/database/models/ExampleModel.txt
+src/tests/sampleTest.test.txt
