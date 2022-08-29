@@ -1,8 +1,14 @@
 import { DataTypes, Model } from 'sequelize';
 import db from '.';
-// import OtherModel from './OtherModel';
+import * as bcrypt from 'bcryptjs'
 
-class User extends Model {}
+class User extends Model {
+  public id: number;
+  public username: string;
+  public role: string;
+  public email: string;
+  public password: string
+}
 
 User.init({
   id: {
