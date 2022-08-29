@@ -6,7 +6,7 @@ import User from '../../database/models/User';
 
 const { expect } = chai;
 
-describe('Testa a camada userService', () => {
+describe('Testa a camada UserService', () => {
   describe('quando o usuário não existe no BD', () => {
     const mock = null
 
