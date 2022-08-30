@@ -5,10 +5,9 @@ import chaiHttp = require('chai-http');
 import * as bcrypt from 'bcryptjs'
 
 import { app } from '../app';
-// import Example from '../database/models/ExampleModel';
+import User from '../database/models/User';
 
 import { Response } from 'superagent';
-import User from '../database/models/User';
 
 chai.use(chaiHttp);
 
@@ -94,7 +93,7 @@ describe('Testa a requisição POST/login', () => {
 
       expect(sut.body).to.be.a('object')
     })
-    it('o objeto retornado possui a chave token, e seu valor é uma string', async () => {
+    it('o objeto retornado possui a chave "token", e seu valor é uma string', async () => {
       const sut = await chai.request(app).post('/login').send(mock)
 
       expect(sut.body).to.have.all.keys('token')
