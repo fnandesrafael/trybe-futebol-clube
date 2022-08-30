@@ -8,6 +8,7 @@ import { app } from '../app';
 import User from '../database/models/User';
 
 import { Response } from 'superagent';
+import UserService from '../services/UserService';
 
 chai.use(chaiHttp);
 
@@ -28,17 +29,32 @@ describe('Testa a requisição POST/login', () => {
       sinon.restore()
     })
     
-    it('é retornado uma mensagem com o texto: "User not found"', async () => {
+    it('é retornado uma mensagem com o texto: "Incorrect email or password"', async () => {
       const sut = await chai.request(app).post('/login').send(mock)
 
-      expect(sut.body).to.be.equal('User not found')
+      expect(sut.body).to.be.equal('Incorrect email or password')
     });
-    it('é retornado um status 404', async () => {
+    it('é retornado um status 401', async () => {
       const sut = await chai.request(app).post('/login').send(mock)
 
-      expect(sut.status).to.be.equal(404)
+      expect(sut.status).to.be.equal(401)
     })
   });
+
+  describe('quando o usuário não informa email ou senha', () => {
+    const mock = {}
+    
+    it('é retornado a mensagem: "All fields must be filled"', async () => {
+      const sut = await chai.request(app).post('/login').send(mock)
+
+      expect(sut.body).to.be.equal('All fields must be filled')
+    })
+    it('é retornado um status 400', async () => {
+      const sut = await chai.request(app).post('/login').send(mock)
+
+      expect(sut.status).to.be.equal(400)
+    })
+  })
 
   describe('quando o usuário que faz login existe no BD, mas suas credenciais estão incorretas', () => {
     const mock = {
@@ -58,15 +74,15 @@ describe('Testa a requisição POST/login', () => {
       sinon.restore()
     })
     
-    it('é retornado uma mensagem com o texto: "Invalid credentials"', async () => {
+    it('é retornado uma mensagem com o texto: "Incorrect email or password"', async () => {
       const sut = await chai.request(app).post('/login').send(mock)
 
-      expect(sut.body).to.be.equal('Invalid credentials')
+      expect(sut.body).to.be.equal('Incorrect email or password')
     })
-    it('é retornado um status 403', async () => {
+    it('é retornado um status 401', async () => {
       const sut = await chai.request(app).post('/login').send(mock)
 
-      expect(sut.status).to.be.equal(403)
+      expect(sut.status).to.be.equal(401)
     })
   });
 

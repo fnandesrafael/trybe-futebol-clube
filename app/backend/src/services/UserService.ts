@@ -5,6 +5,10 @@ import generateJwt from "../utils/generateJwt";
 
 export default class UserService {
   public login = async (payloadUser: IPayloadUser) => {
+    if(!payloadUser.email || !payloadUser.password) {
+      return { message: "All fields must be filled" , statusCode: 400 }
+    }
+
     const user = await User.findOne({ where: { email: payloadUser.email } })
 
     if(user !== null) {
@@ -15,7 +19,7 @@ export default class UserService {
       }
 
       return isValidPassword ? { message: { token: generateJwt(payload) }, statusCode: 200 }
-        : { message: 'Invalid credentials', statusCode: 403 }
-    } return { message: 'User not found', statusCode: 404 }
+        : { message: 'Incorrect email or password', statusCode: 401 }
+    } return { message: 'Incorrect email or password', statusCode: 401 }
   }
 }
