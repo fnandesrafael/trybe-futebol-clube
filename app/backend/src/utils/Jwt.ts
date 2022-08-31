@@ -1,7 +1,7 @@
 import {JwtPayload, sign, SignOptions, verify } from 'jsonwebtoken'
 import 'dotenv/config'
 
-const jwtSecret = JSON.stringify(process.env.JWT_SECRET)
+const jwtSecret = process.env.JWT_SECRET || 'jwt_secret'
 
 const jwtConfig: SignOptions = {
   expiresIn: '15m',
@@ -18,7 +18,6 @@ export default class Jwt {
     try {
       const decoded = verify(token, jwtSecret)
       return decoded as JwtPayload
-
     } catch(err) {
       return false
     }
