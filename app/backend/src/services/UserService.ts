@@ -1,7 +1,7 @@
 import IPayloadUser from "../interfaces/IPayloadUser";
 import User from "../database/models/User";
 import * as bcrypt from 'bcryptjs'
-import generateJwt from "../utils/generateJwt";
+import Jwt from "../utils/Jwt";
 
 export default class UserService {
   public login = async (payloadUser: IPayloadUser) => {
@@ -18,8 +18,17 @@ export default class UserService {
         email: user.email
       }
 
-      return isValidPassword ? { message: { token: generateJwt(payload) }, statusCode: 200 }
+      return isValidPassword ? { message: { token: Jwt.generateJwt (payload) }, statusCode: 200 }
         : { message: 'Incorrect email or password', statusCode: 401 }
     } return { message: 'Incorrect email or password', statusCode: 401 }
+  }
+
+  public validate = async (token: string) => {
+    const response = Jwt.authJwt(token)
+
+    if(response) {
+      const user = await User.findByPk(response.id)
+      return { statusCode: 200, message: { role: user?.role } }
+    } return { statusCode: 401, message: 'Invalid token was provided' }
   }
 }
