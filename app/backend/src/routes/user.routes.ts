@@ -1,11 +1,12 @@
 import { Router } from "express";
 import UserController from "../controllers/UserController";
-import * as cors from 'cors'
 
 const router = Router()
 
 const userController = new UserController()
 
-router.post('/', cors(), userController.login)
+router.post('/', userController.login)
+
+router.get('/validate', userController.validate)
 
 export default router

@@ -1,5 +1,6 @@
 import * as express from 'express';
 import UserRouter from './routes/user.routes'
+import * as cors from 'cors'
 
 class App {
   public app: express.Express;
@@ -8,6 +9,8 @@ class App {
     this.app = express();
 
     this.config();
+
+    this.app.use(cors())
 
     // Não remover essa rota
     this.app.get('/', (req, res) => res.json({ ok: true }));
