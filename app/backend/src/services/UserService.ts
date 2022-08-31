@@ -6,7 +6,7 @@ import Jwt from "../utils/Jwt";
 export default class UserService {
   public login = async (payloadUser: IPayloadUser) => {
     if(!payloadUser.email || !payloadUser.password) {
-      return { message: "All fields must be filled" , statusCode: 400 }
+      return { message: {message: "All fields must be filled"} , statusCode: 400 }
     }
 
     const user = await User.findOne({ where: { email: payloadUser.email } })
@@ -19,8 +19,8 @@ export default class UserService {
       }
 
       return isValidPassword ? { message: { token: Jwt.generateJwt (payload) }, statusCode: 200 }
-        : { message: 'Incorrect email or password', statusCode: 401 }
-    } return { message: 'Incorrect email or password', statusCode: 401 }
+        : { message: {message: 'Incorrect email or password'}, statusCode: 401 }
+    } return { message: {message: 'Incorrect email or password'}, statusCode: 401 }
   }
 
   public validate = async (token: string) => {
@@ -29,6 +29,6 @@ export default class UserService {
     if(response) {
       const user = await User.findByPk(response.id)
       return { statusCode: 200, message: { role: user?.role } }
-    } return { statusCode: 401, message: 'Invalid token was provided' }
+    } return { statusCode: 401, message: {message: 'Invalid token was provided'} }
   }
 }

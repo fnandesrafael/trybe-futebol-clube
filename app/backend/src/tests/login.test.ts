@@ -32,7 +32,7 @@ describe('Testa a requisição POST/login', () => {
     it('é retornado uma mensagem com o texto: "Incorrect email or password"', async () => {
       const sut = await chai.request(app).post('/login').send(mock)
 
-      expect(sut.body).to.be.equal('Incorrect email or password')
+      expect(sut.body.message).to.be.equal('Incorrect email or password')
     });
     it('é retornado um status 401', async () => {
       const sut = await chai.request(app).post('/login').send(mock)
@@ -47,7 +47,7 @@ describe('Testa a requisição POST/login', () => {
     it('é retornado a mensagem: "All fields must be filled"', async () => {
       const sut = await chai.request(app).post('/login').send(mock)
 
-      expect(sut.body).to.be.equal('All fields must be filled')
+      expect(sut.body.message).to.be.equal('All fields must be filled')
     })
     it('é retornado um status 400', async () => {
       const sut = await chai.request(app).post('/login').send(mock)
@@ -77,7 +77,7 @@ describe('Testa a requisição POST/login', () => {
     it('é retornado uma mensagem com o texto: "Incorrect email or password"', async () => {
       const sut = await chai.request(app).post('/login').send(mock)
 
-      expect(sut.body).to.be.equal('Incorrect email or password')
+      expect(sut.body.message).to.be.equal('Incorrect email or password')
     })
     it('é retornado um status 401', async () => {
       const sut = await chai.request(app).post('/login').send(mock)

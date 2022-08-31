@@ -63,7 +63,7 @@ describe('Testa a requisição GET/login/validate', () => {
       await chai.request(app).post('/login').send(payload)
       const sut = await chai.request(app).get('/login/validate').set('authorization', wrongToken)
 
-      expect(sut.body).to.be.equal('Invalid token was provided')
+      expect(sut.body.message).to.be.equal('Invalid token was provided')
     })
   })
 
