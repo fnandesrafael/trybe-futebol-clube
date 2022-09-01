@@ -15,7 +15,7 @@ export default class UserController {
     const { authorization } = req.headers
     
     if(!authorization) {
-      return res.status(404).json('Authorization token was not found')
+      return res.status(404).json({message: 'Authorization token was not found'})
     }
 
     const response = await this.service.validate(authorization)
