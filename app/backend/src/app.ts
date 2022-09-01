@@ -1,5 +1,6 @@
 import * as express from 'express';
 import UserRouter from './routes/user.routes'
+import TeamRouter from './routes/team.routes'
 import * as cors from 'cors'
 
 class App {
@@ -16,6 +17,9 @@ class App {
     this.app.get('/', (req, res) => res.json({ ok: true }));
 
     this.app.use('/login', UserRouter)
+    
+    this.app.use('/teams', TeamRouter)
+
   }
 
   private config():void {
