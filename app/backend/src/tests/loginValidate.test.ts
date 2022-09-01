@@ -23,10 +23,15 @@ describe('Testa a requisição GET/login/validate', () => {
 
       expect(sut.status).to.be.equal(404)
     })
-    it('é retornado uma mensagem com o texto "Authorization token was not found"', async () => {
+    it('é retornado um objeto com a chave "message"', async () => {
       const sut = await chai.request(app).get('/login/validate')
 
-      expect(sut.body).to.be.equal('Authorization token was not found')
+      expect(sut.body).to.have.all.keys('message')
+    })
+    it('a chave "message" possui o valor: "Authorization token was not found"', async () => {
+      const sut = await chai.request(app).get('/login/validate')
+
+      expect(sut.body.message).to.be.equal('Authorization token was not found')
     })
   })
 
