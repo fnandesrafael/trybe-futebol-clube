@@ -16,7 +16,8 @@ export default class TeamService {
     const team = await Team.findByPk(id)
 
     if(team !== null) {
-      return { statusCode: 200, message: team }
+      const camelizedTeam = camelize([JSON.parse(JSON.stringify(team))])
+      return { statusCode: 200, message: camelizedTeam[0] }
     } return { statusCode: 404, message: {message: 'No teams were found with the id provided'}}
   }
 }

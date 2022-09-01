@@ -67,10 +67,10 @@ describe('Testa todas as requisições da rota /teams', () => {
       
       expect(sut.body[0]).to.be.a('object')
     })
-    it('os objetos dentro do array possuem as propriedades "id" e "team_name"', async () => {
+    it('os objetos dentro do array possuem as propriedades "id" e "teamName"', async () => {
       const sut = await chai.request(app).get('/teams')
       
-      expect(sut.body[0]).to.have.all.keys('id', 'team_name')
+      expect(sut.body[0]).to.have.all.keys('id', 'teamName')
     })
   })
 
@@ -125,10 +125,10 @@ describe('Testa todas as requisições da rota /teams', () => {
       
       expect(sut.body).to.be.a('object')
     })
-    it('o objeto retornado possui as chaves "id" e "team_name"', async () => {
+    it('o objeto retornado possui as chaves "id" e "teamName"', async () => {
       const sut = await chai.request(app).get('/teams/:id').query({id: 1})
 
-      expect(sut.body).to.have.all.keys('id', 'team_name')
+      expect(sut.body).to.have.all.keys('id', 'teamName')
     })
   })
 });
