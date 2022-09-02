@@ -11,7 +11,8 @@ module.exports = {
       },
       teamName: {
         type: Sequelize.STRING,
-        allowNull: false
+        allowNull: false,
+        field: 'team_name'
       }
     })
   },
