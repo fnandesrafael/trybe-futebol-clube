@@ -45,7 +45,7 @@ Match.init({
   timestamps: false
 })
 
-Team.belongsTo(Match, { foreignKey: 'home_team', as: 'team_name' })
-Team.belongsTo(Match, { foreignKey: 'away_team', as: 'team_name' })
+Team.belongsTo(Match, { foreignKey: 'team_name', as: 'home_team' })
+Team.belongsTo(Match, { foreignKey: 'team_name', as: 'away_team' })
 
 export default Match

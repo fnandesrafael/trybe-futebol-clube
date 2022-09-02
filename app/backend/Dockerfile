@@ -10,4 +10,4 @@ EXPOSE 3001
 
 RUN npx tsc
 
-CMD ["npm", "start", "dev"]
+CMD ["npm", "run", "dev"]
