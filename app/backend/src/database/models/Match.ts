@@ -3,12 +3,12 @@ import db from '.';
 import Team from './Team';
 
 class Match extends Model {
-  public id!: number;
-  public home_team!: number;
-  public home_team_goals!: number;
-  public away_team!: number;
-  public away_team_goals!: number;
-  public in_progress!: boolean;
+  public id: number;
+  public homeTeam: number;
+  public homeTeamGoals: number;
+  public awayTeam: number;
+  public awayTeamGoals: number;
+  public inProgress: boolean;
 }
 
 Match.init({
@@ -18,23 +18,23 @@ Match.init({
     primaryKey: true,
     autoIncrement: true,
   },
-  home_team: {
+  homeTeam: {
     type: typeof DataTypes.INTEGER,
     allowNull: false,
   },
-  home_team_goals: {
+  homeTeamGoals: {
     type: typeof DataTypes.INTEGER,
     allowNull: false,
   },
-  away_team: {
+  awayTeam: {
     type: typeof DataTypes.INTEGER,
     allowNull: false,
   },
-  away_team_goals: {
+  awayTeamGoals: {
     type: typeof DataTypes.INTEGER,
     allowNull: false,
   },
-  in_progress: {
+  inProgress: {
     type: typeof DataTypes.BOOLEAN,
     allowNull: false,
   },
@@ -45,9 +45,9 @@ Match.init({
   timestamps: false,
 });
 
-Match.hasMany(Team, { foreignKey: 'id', as: 'home_team' });
-Match.hasMany(Team, { foreignKey: 'id', as: 'away_team' });
-Team.belongsTo(Match, { foreignKey: 'id', as: 'home_team' });
-Team.belongsTo(Match, { foreignKey: 'id', as: 'away_team' });
+Match.hasMany(Team, { foreignKey: 'id', as: 'homeTeam' });
+Match.hasMany(Team, { foreignKey: 'id', as: 'awayTeam' });
+Team.belongsTo(Match, { foreignKey: 'id', as: 'homeTeam' });
+Team.belongsTo(Match, { foreignKey: 'id', as: 'awayTeam' });
 
 export default Match;

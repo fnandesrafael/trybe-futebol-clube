@@ -3,4 +3,4 @@ interface IPayloadUser {
   password: string
 }
 
-export default IPayloadUser
+export default IPayloadUser;

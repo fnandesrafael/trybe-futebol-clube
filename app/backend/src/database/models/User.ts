@@ -1,13 +1,12 @@
 import { DataTypes, Model } from 'sequelize';
 import db from '.';
-import * as bcrypt from 'bcryptjs'
 
 class User extends Model {
-  public id: number;
-  public username: string;
-  public role: string;
-  public email: string;
-  public password: string
+  public id!: number;
+  public username!: string;
+  public role!: string;
+  public email!: string;
+  public password!: string;
 }
 
 User.init({
@@ -15,24 +14,24 @@ User.init({
     type: typeof DataTypes.INTEGER,
     allowNull: false,
     primaryKey: true,
-    autoIncrement: true
+    autoIncrement: true,
   },
   username: {
     type: typeof DataTypes.STRING,
-    allowNull: false
+    allowNull: false,
   },
   role: {
     type: typeof DataTypes.STRING,
-    allowNull: false
+    allowNull: false,
   },
   email: {
     type: typeof DataTypes.STRING,
-    allowNull: false
+    allowNull: false,
   },
   password: {
     type: typeof DataTypes.STRING,
-    allowNull: false
-  }
+    allowNull: false,
+  },
 }, {
   underscored: true,
   sequelize: db,

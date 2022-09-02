@@ -44,8 +44,8 @@ describe('Testa todas as requisições da rota /teams', () => {
     beforeEach(() => {
       sinon.stub(Team, 'findAll').resolves([{
         id: 1,
-        team_name: 'Santa Cruz'
-      }as Team])
+        teamName: 'Santa Cruz'
+      } as Team])
     })
 
     afterEach(() => {
@@ -104,7 +104,7 @@ describe('Testa todas as requisições da rota /teams', () => {
   describe('quando é feito uma requisição na rota GET/teams/:id, e o id passado existe no BD', () => {
     const mock = {
       id: 1,
-      team_name: 'Santa Cruz'
+      teamName: 'Santa Cruz'
     }
     
     beforeEach(() => {

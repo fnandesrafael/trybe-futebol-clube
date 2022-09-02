@@ -1,25 +1,25 @@
-import {JwtPayload, sign, SignOptions, verify } from 'jsonwebtoken'
-import 'dotenv/config'
+import { JwtPayload, sign, SignOptions, verify } from 'jsonwebtoken';
+import 'dotenv/config';
 
-const jwtSecret = process.env.JWT_SECRET || 'jwt_secret'
+const jwtSecret = process.env.JWT_SECRET || 'jwt_secret';
 
 const jwtConfig: SignOptions = {
   expiresIn: '15m',
-  algorithm: 'HS256'
-}
+  algorithm: 'HS256',
+};
 
 export default class Jwt {
   public static generateJwt = (payload: JwtPayload) => {
-    const token = sign(payload, jwtSecret, jwtConfig)
-    return token
-  }
+    const token = sign(payload, jwtSecret, jwtConfig);
+    return token;
+  };
 
   public static authJwt = (token: string) => {
     try {
-      const decoded = verify(token, jwtSecret)
-      return decoded as JwtPayload
-    } catch(err) {
-      return false
+      const decoded = verify(token, jwtSecret);
+      return decoded as JwtPayload;
+    } catch (err) {
+      return false;
     }
-  }
+  };
 }

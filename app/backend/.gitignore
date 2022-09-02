@@ -5,3 +5,4 @@ node_modules.tar.gz
 *.http
 src/database/models/ExampleModel.txt
 src/tests/sampleTest.test.txt
+src/utils/camelize.ts

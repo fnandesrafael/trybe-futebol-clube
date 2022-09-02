@@ -9,7 +9,7 @@ module.exports = {
         primaryKey: true,
         autoIncrement: true
       },
-      team_name: {
+      teamName: {
         type: Sequelize.STRING,
         allowNull: false
       }

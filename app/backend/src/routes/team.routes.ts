@@ -1,12 +1,12 @@
-import { Router } from "express";
-import TeamController from "../controllers/TeamController";
+import { Router } from 'express';
+import TeamController from '../controllers/TeamController';
 
-const router = Router()
+const router = Router();
 
-const teamController = new TeamController()
+const teamController = new TeamController();
 
-router.get('/', teamController.getAll)
+router.get('/', teamController.getAll);
 
-router.get('/:id', teamController.getOne)
+router.get('/:id', teamController.getOne);
 
-export default router
+export default router;
