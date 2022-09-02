@@ -3,15 +3,13 @@ import Match from '../database/models/Match';
 
 export default class MatchService {
   public getAll = async () => {
-    try {
-      const matches = await Match.findAll({ include: [
-        { model: Team, as: 'teamHome', attributes: ['teamName'] },
-        { model: Team, as: 'teamAway', attributes: ['teamName'] },
-      ] });
+    const matches = await Match.findAll({ include: [
+      { model: Team, as: 'teamHome', attributes: ['teamName'] },
+      { model: Team, as: 'teamAway', attributes: ['teamName'] },
+    ] });
+
+    if (matches.length > 0) {
       return { statusCode: 200, message: matches };
-    } catch (err) {
-      console.log(err);
-      return { statusCode: 400, message: { message: 'Bad request' } };
-    }
+    } return { statusCode: 400, message: { message: 'Bad request' } };
   };
 }
