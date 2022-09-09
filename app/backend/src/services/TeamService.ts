@@ -15,6 +15,6 @@ export default class TeamService {
 
     if (team !== null) {
       return { statusCode: 200, message: team };
-    } return { statusCode: 404, message: { message: 'No teams were found with the id provided' } };
+    } return { statusCode: 404, message: { message: 'There is no team with such id!' } };
   };
 }
