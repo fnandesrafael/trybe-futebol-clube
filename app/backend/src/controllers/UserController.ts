@@ -12,13 +12,9 @@ export default class UserController {
   };
 
   public validate = async (req: Request, res: Response) => {
-    const { authorization } = req.headers;
+    const { decode } = res.locals;
 
-    if (!authorization) {
-      return res.status(404).json({ message: 'Authorization token was not found' });
-    }
-
-    const response = await this.service.validate(authorization);
+    const response = await this.service.validate(decode);
 
     return res.status(response.statusCode).json(response.message);
   };

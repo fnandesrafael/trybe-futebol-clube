@@ -1,4 +1,5 @@
 import * as bcrypt from 'bcryptjs';
+import { JwtPayload } from 'jsonwebtoken';
 import IPayloadUser from '../interfaces/IPayloadUser';
 import User from '../database/models/User';
 import Jwt from '../utils/Jwt';
@@ -23,12 +24,8 @@ export default class UserService {
     } return { message: { message: 'Incorrect email or password' }, statusCode: 401 };
   };
 
-  public validate = async (token: string) => {
-    const response = Jwt.authJwt(token);
-
-    if (response) {
-      const user = await User.findByPk(response.id);
-      return { statusCode: 200, message: { role: user?.role } };
-    } return { statusCode: 401, message: { message: 'Invalid token was provided' } };
+  public validate = async (payload: JwtPayload) => {
+    const user = await User.findByPk(payload.id);
+    return { statusCode: 200, message: { role: user?.role } };
   };
 }
