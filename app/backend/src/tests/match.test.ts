@@ -107,4 +107,92 @@ describe('Testa todas as requisições da rota /matches', () => {
       )
     })
   })
+
+  describe('quando uma requisição é feita na rota GET/matches e é passado a query "inProgress" como "true"', () => {
+    beforeEach(() => {
+      sinon.stub(Match, 'findAll').resolves([
+            {
+              id: 1,
+              homeTeam: 1,
+              homeTeamGoals: 10,
+              awayTeam: 2,
+              awayTeamGoals: 0,
+              inProgress: 1,
+              teamHome: {
+                teamName: "Santa Cruz"
+              },
+              teamAway: {
+                teamName: "Sport"
+              }
+            }
+          ] as any)
+    })
+
+    afterEach(() => {
+      sinon.restore()
+    })
+
+    it('é retornado um status 200', async () => {
+      const sut = await chai.request(app).get('/matches').query({inProgress: 'true'})
+
+      expect(sut.status).to.be.equal(200)
+    })
+    it('é retornado um array de objetos', async () => {
+      const sut = await chai.request(app).get('/matches?inProgress=true')
+
+      expect(sut.body).to.be.a('array')
+      expect(sut.body[0]).to.be.a('object')
+    })
+    it('todos os objetos possuem o valor "1" na chave inProgress', async () => {
+      const sut = await chai.request(app).get('/matches').query({inProgress: 'true'})
+
+      for (let i = 0; i < sut.body.length; i += 1) {
+        expect(sut.body[i].inProgress).to.be.equal(1)
+      }
+    })
+  })
+
+  describe('quando uma requisição é feita na rota GET/matches e é passado a query "inProgress" como "false"', () => {
+    beforeEach(() => {
+      sinon.stub(Match, 'findAll').resolves([
+            {
+              id: 1,
+              homeTeam: 1,
+              homeTeamGoals: 10,
+              awayTeam: 2,
+              awayTeamGoals: 0,
+              inProgress: 0,
+              teamHome: {
+                teamName: "Santa Cruz"
+              },
+              teamAway: {
+                teamName: "Sport"
+              }
+            }
+          ] as any)
+    })
+
+    afterEach(() => {
+      sinon.restore()
+    })
+
+    it('é retornado um status 200', async () => {
+      const sut = await chai.request(app).get('/matches').query({inProgress: 'false'})
+
+      expect(sut.status).to.be.equal(200)
+    })
+    it('é retornado um array de objetos', async () => {
+      const sut = await chai.request(app).get('/matches?inProgress=true')
+
+      expect(sut.body).to.be.a('array')
+      expect(sut.body[0]).to.be.a('object')
+    })
+    it('todos os objetos possuem o valor "0" na chave inProgress', async () => {
+      const sut = await chai.request(app).get('/matches').query({inProgress: 'false'})
+
+      for (let i = 0; i < sut.body.length; i += 1) {
+        expect(sut.body[i].inProgress).to.be.equal(0)
+      }
+    })
+  })
 });
