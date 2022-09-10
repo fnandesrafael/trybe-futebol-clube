@@ -94,10 +94,10 @@ describe('Testa todas as requisições da rota /teams', () => {
       expect(sut.body).to.be.a('object')
       expect(sut.body).to.have.all.keys('message')
     })
-    it('a chave "message" possui o valor: "No teams were found with the id provided"', async () => {
+    it('a chave "message" possui o valor: "There is no team with such id!"', async () => {
       const sut = await chai.request(app).get('/teams/:id').query({id: 1})
 
-      expect(sut.body.message).to.be.equal('No teams were found with the id provided')
+      expect(sut.body.message).to.be.equal('There is no team with such id!')
     })
   })
 

@@ -7,11 +7,6 @@ import * as bcrypt from 'bcryptjs'
 import { app } from '../app';
 import User from '../database/models/User';
 
-import { Response } from 'superagent';
-import UserService from '../services/UserService';
-import UserController from '../controllers/UserController';
-import Jwt from '../utils/Jwt';
-
 chai.use(chaiHttp);
 
 const { expect } = chai;
@@ -51,7 +46,6 @@ describe('Testa a requisição GET/login/validate', () => {
     beforeEach(() => {
       sinon.stub(User, 'findOne').resolves(mockedUser as User)
       sinon.stub(bcrypt, 'compare').resolves(true)
-      sinon.stub(Jwt, 'authJwt').returns(false)
     })
 
     afterEach(() => {
@@ -64,11 +58,11 @@ describe('Testa a requisição GET/login/validate', () => {
 
       expect(sut.status).to.be.equal(401)
     })
-    it('é retornado uma mensagem com o texto "Invalid token was provided"', async () => {
+    it('é retornado uma mensagem com o texto "Token must be a valid token"', async () => {
       await chai.request(app).post('/login').send(payload)
       const sut = await chai.request(app).get('/login/validate').set('authorization', wrongToken)
 
-      expect(sut.body.message).to.be.equal('Invalid token was provided')
+      expect(sut.body.message).to.be.equal('Token must be a valid token')
     })
   })
 
@@ -83,17 +77,10 @@ describe('Testa a requisição GET/login/validate', () => {
       password: 'secret_teste',
       role: 'teste'
     }
-    const decodedMock = {
-      id: 1,
-      email: 'teste@teste.com',
-      iat: 0,
-      exp: 0
-    }
 
     beforeEach(() => {
       sinon.stub(User, 'findOne').resolves(mockedUser as User)
       sinon.stub(bcrypt, 'compare').resolves(true)
-      sinon.stub(Jwt, 'authJwt').returns(decodedMock)
     })
 
     afterEach(() => {
