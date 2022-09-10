@@ -2,11 +2,13 @@ import * as sinon from 'sinon';
 import * as chai from 'chai';
 // @ts-ignore
 import chaiHttp = require('chai-http');
+import * as bcrypt from 'bcryptjs'
 
 import { app } from '../app';
 import Match from '../database/models/Match';
 
 import { Response } from 'superagent';
+import User from '../database/models/User';
 
 chai.use(chaiHttp);
 
@@ -193,6 +195,94 @@ describe('Testa todas as requisições da rota /matches', () => {
       for (let i = 0; i < sut.body.length; i += 1) {
         expect(sut.body[i].inProgress).to.be.equal(0)
       }
+    })
+  })
+
+  describe('quando é feita uma requisiçáo do tipo POST/matches com dois times iguais', () => {
+    const payload = {
+      homeTeam: 1,
+      awayTeam: 1,
+      homeTeamGoals: 2,
+      awayTeamGoals: 0,
+      inProgress: true
+    }
+
+    beforeEach(() => {
+      sinon.stub(User, 'findOne').resolves({
+        id: 1,
+        username: 'Teste',
+        email: 'teste@teste.com',
+        password: 'secret_teste'
+      } as User)
+      sinon.stub(bcrypt, 'compare').resolves(true)
+    })
+
+    afterEach(() => {
+      sinon.restore()
+    })
+
+    it('é retornado um status 401', async () => {
+      const loginResponse = await chai.request(app).post('/login').send({email: 'teste@teste.com', password: 'secret_teste'})
+      const { token } = loginResponse.body
+      const sut = await chai.request(app).post('/matches').send(payload).set('authorization', token)
+
+      expect(sut.status).to.be.equal(401)
+    })
+    it('é retornado um objeto com a chave "message"', async () => {
+      const loginResponse = await chai.request(app).post('/login').send({email: 'teste@teste.com', password: 'secret_teste'})
+      const { token } = loginResponse.body
+      const sut = await chai.request(app).post('/matches').send(payload).set('authorization', token)
+
+      expect(sut.body).to.be.a('object')
+      expect(sut.body).to.have.all.keys('message')
+    })
+    it('a chave "message" possui o valor: It is not possible to create a match with two equal teams', async () => {
+      const loginResponse = await chai.request(app).post('/login').send({email: 'teste@teste.com', password: 'secret_teste'})
+      const { token } = loginResponse.body
+      const sut = await chai.request(app).post('/matches').send(payload).set('authorization', token)
+
+      expect(sut.body.message).to.be.equal('It is not possible to create a match with two equal teams')
+    })
+  })
+
+  describe('quando é feita uma requisiçáo do tipo POST/matches com sucesso', () => {
+    const payload = {
+      homeTeam: 1,
+      awayTeam: 2,
+      homeTeamGoals: 2,
+      awayTeamGoals: 0,
+      inProgress: true
+    }
+
+    beforeEach(() => {
+      sinon.stub(User, 'findOne').resolves({
+        id: 1,
+        username: 'Teste',
+        email: 'teste@teste.com',
+        password: 'secret_teste'
+      } as User)
+      sinon.stub(bcrypt, 'compare').resolves(true)
+      sinon.stub(Match, 'create').resolves({ id: 1, ...payload } as Match)
+    })
+
+    afterEach(() => {
+      sinon.restore()
+    })
+
+    it('é retornado um status 201', async () => {
+      const loginResponse = await chai.request(app).post('/login').send({email: 'teste@teste.com', password: 'secret_teste'})
+      const { token } = loginResponse.body
+      const sut = await chai.request(app).post('/matches').send(payload).set('authorization', token)
+
+      expect(sut.status).to.be.equal(201)
+    })
+    it('é retornado um objeto com as chaves "id", "homeTeam", "homeTeamGoals", "awayTeam", "awayTeamGoals", "inProgress"', async () => {
+      const loginResponse = await chai.request(app).post('/login').send({email: 'teste@teste.com', password: 'secret_teste'})
+      const { token } = loginResponse.body
+      const sut = await chai.request(app).post('/matches').send(payload).set('authorization', token)
+
+      expect(sut.body).to.be.a('object')
+      expect(sut.body).to.have.all.keys('id', 'homeTeam', 'homeTeamGoals', 'awayTeam', 'awayTeamGoals', 'inProgress')
     })
   })
 });
