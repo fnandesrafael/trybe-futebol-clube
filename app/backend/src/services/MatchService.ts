@@ -41,4 +41,20 @@ export default class MatchService {
       return { statusCode: 201, message: newMatch };
     } return { statusCode: 404, message: { message: 'There is no team with such id!' } };
   };
+
+  public finish = async (id: string) => {
+    const updatedMatch = await Match.update({ inProgress: false }, { where: { id } });
+
+    if (updatedMatch[0] !== 0) {
+      return { statusCode: 200, message: { message: 'Finished' } };
+    } return { statusCode: 400, message: { message: 'Match is already finished' } };
+  };
+
+  public updateScore = async (id: string, homeTeamGoals: number, awayTeamGoals: number) => {
+    const updatedScore = await Match.update({ homeTeamGoals, awayTeamGoals }, { where: { id } });
+
+    if (updatedScore[0] !== 0) {
+      return { statusCode: 200, message: { actualScore: { homeTeamGoals, awayTeamGoals } } };
+    } return { statusCode: 400, message: { message: 'Bad request' } };
+  };
 }
