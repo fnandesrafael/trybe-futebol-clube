@@ -285,4 +285,180 @@ describe('Testa todas as requisições da rota /matches', () => {
       expect(sut.body).to.have.all.keys('id', 'homeTeam', 'homeTeamGoals', 'awayTeam', 'awayTeamGoals', 'inProgress')
     })
   })
+
+  describe('quando é feita uma requisição do tipo PATCH/matches/:id/finish com sucesso', () => {    
+    const mockedUser = {email: 'teste@teste.com', password: 'secret_password'}
+    
+    beforeEach(() => {
+      sinon.stub(User, 'findOne').resolves(mockedUser as User)
+      sinon.stub(bcrypt, 'compare').resolves(true)
+      sinon.stub(Match, 'update').resolves([1] as any)
+    })
+
+    afterEach(() => {
+      sinon.restore()
+    })
+    
+    it('é retornado um status 200', async () => {
+      const loginResponse = await chai.request(app).post('/login').send(mockedUser)
+      const {token} = loginResponse.body
+
+      const sut = await chai.request(app).patch(`/matches/:id/finish`)
+        .set('authorization', token)
+        .query({id: 1})
+
+      expect(sut.status).to.be.equal(200)
+    })
+    it('é retornado uma um objeto com a mensagem "Finished"', async () => {
+      const loginResponse = await chai.request(app).post('/login').send(mockedUser)
+      const {token} = loginResponse.body
+
+      const sut = await chai.request(app).patch(`/matches/:id/finish`)
+        .set('authorization', token)
+        .query({id: 1})
+
+      expect(sut.body).to.be.a('object')
+      expect(sut.body).to.have.all.keys('message')
+      expect(sut.body.message).to.be.equal('Finished')
+    })
+  })
+
+  describe('quando é feita uma requisição do tipo PATCH/matches/:id/finish mas a partida já foi finalizada', () => {    
+    const mockedUser = {email: 'teste@teste.com', password: 'secret_password'}
+    
+    beforeEach(() => {
+      sinon.stub(User, 'findOne').resolves(mockedUser as User)
+      sinon.stub(bcrypt, 'compare').resolves(true)
+      sinon.stub(Match, 'update').resolves([0] as any)
+    })
+
+    afterEach(() => {
+      sinon.restore()
+    })
+    
+    it('é retornado um status 400', async () => {
+      const loginResponse = await chai.request(app).post('/login').send(mockedUser)
+      const {token} = loginResponse.body
+
+      const sut = await chai.request(app).patch(`/matches/:id/finish`)
+        .set('authorization', token)
+        .query({id: 1})
+
+      expect(sut.status).to.be.equal(400)
+    })
+    it('é retornado uma um objeto com a mensagem "Match is already finished"', async () => {
+      const loginResponse = await chai.request(app).post('/login').send(mockedUser)
+      const {token} = loginResponse.body
+
+      const sut = await chai.request(app).patch(`/matches/:id/finish`)
+        .set('authorization', token)
+        .query({id: 1})
+
+      expect(sut.body).to.be.a('object')
+      expect(sut.body).to.have.all.keys('message')
+      expect(sut.body.message).to.be.equal('Match is already finished')
+    })
+  })
+
+  describe('quando é feita uma requisição do tipo PATCH/matches/:id com suceso', () => {
+    const mockedUser = {email: 'teste@teste.com', password: 'secret_password'}
+    const mockedScore = {homeTeamGoals: 5, awayTeamGoals: 2}
+    
+    beforeEach(() => {
+      sinon.stub(User, 'findOne').resolves(mockedUser as User)
+      sinon.stub(bcrypt, 'compare').resolves(true)
+      sinon.stub(Match, 'update').resolves([1] as any)
+    })
+
+    afterEach(() => {
+      sinon.restore()
+    })
+
+    it('é retornado um status 200', async () => {
+      const loginResponse = await chai.request(app).post('/login').send(mockedUser)
+      const {token} = loginResponse.body
+
+      const sut = await chai.request(app).patch(`/matches/:id`)
+        .set('authorization', token)
+        .query({id: 1})
+        .send(mockedScore)
+
+      expect(sut.status).to.be.equal(200)
+    })
+    it('é retornado um objeto com a chave "actualScore"', async () => {
+      const loginResponse = await chai.request(app).post('/login').send(mockedUser)
+      const {token} = loginResponse.body
+
+      const sut = await chai.request(app).patch(`/matches/:id`)
+        .set('authorization', token)
+        .query({id: 1})
+        .send(mockedScore)
+
+      expect(sut.body).to.be.a('object')
+      expect(sut.body).to.have.all.keys('actualScore')
+    })
+    it('a chave "actualScore" é um objeto com as chaves "homeTeamGoals" e "awayTeamGoals"', async () => {
+      const loginResponse = await chai.request(app).post('/login').send(mockedUser)
+      const {token} = loginResponse.body
+
+      const sut = await chai.request(app).patch(`/matches/:id`)
+        .set('authorization', token)
+        .query({id: 1})
+        .send(mockedScore)
+
+      expect(sut.body.actualScore).to.be.a('object')
+      expect(sut.body.actualScore).to.have.all.keys('homeTeamGoals', 'awayTeamGoals')
+    })
+  })
+
+  describe('quando é feita uma requsiição do tipo PATCH/matches/:id sem sucesso', () => {
+    const mockedUser = {email: 'teste@teste.com', password: 'secret_password'}
+    const mockedScore = {homeTeamGoals: 5, awayTeamGoals: 2}
+    
+    beforeEach(() => {
+      sinon.stub(User, 'findOne').resolves(mockedUser as User)
+      sinon.stub(bcrypt, 'compare').resolves(true)
+      sinon.stub(Match, 'update').resolves([0] as any)
+    })
+
+    afterEach(() => {
+      sinon.restore()
+    })
+
+    it('é retornado um status 400', async () => {
+      const loginResponse = await chai.request(app).post('/login').send(mockedUser)
+      const {token} = loginResponse.body
+
+      const sut = await chai.request(app).patch(`/matches/:id`)
+        .set('authorization', token)
+        .query({id: 1})
+        .send(mockedScore)
+
+      expect(sut.status).to.be.equal(400)
+    })
+    it('é retornado um objeto com a chave "message"', async () => {
+      const loginResponse = await chai.request(app).post('/login').send(mockedUser)
+      const {token} = loginResponse.body
+
+      const sut = await chai.request(app).patch(`/matches/:id`)
+        .set('authorization', token)
+        .query({id: 1})
+        .send(mockedScore)
+
+      expect(sut.body).to.be.a('object')
+      expect(sut.body).to.have.all.keys('message')
+    })
+    it('a chave "message" possui o valor "Bad request"', async () => {
+      const loginResponse = await chai.request(app).post('/login').send(mockedUser)
+      const {token} = loginResponse.body
+
+      const sut = await chai.request(app).patch(`/matches/:id`)
+        .set('authorization', token)
+        .query({id: 1})
+        .send(mockedScore)
+
+      expect(sut.body.message).to.be.a('string')
+      expect(sut.body.message).to.be.equal('Bad request')
+    })
+  })
 });
